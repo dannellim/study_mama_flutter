@@ -1,5 +1,5 @@
 # Install dependencies
-FROM ubuntu:18.04
+FROM debian:latest AS build-env
 
 ARG PROJECT_DIR=/srv/api
 ENV PATH=/opt/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -20,9 +20,6 @@ COPY ./ ./
 RUN flutter channel beta
 RUN flutter upgrade
 RUN flutter config --enable-web
-
-# Run flutter doctor
-RUN flutter doctor -v
 
 # Copy the app files to the container
 COPY . /usr/local/bin/app
