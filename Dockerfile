@@ -7,8 +7,23 @@ RUN apt-get clean
 # Clone the flutter repo
 RUN git clone https://github.com/dannellim/study_mama_flutter.git /usr/local/flutter
 
-# Set flutter path
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+FROM ubuntu:18.04
+
+ARG PROJECT_DIR=/srv/api
+ENV PATH=/opt/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+RUN apt-get update && \
+    apt-get install -y \
+        xz-utils \
+        git \
+        openssh-client \
+        curl && \
+    rm -rf /var/cache/apt
+
+RUN curl -L https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.7.8+hotfix.4-stable.tar.xz | tar -C /opt -xJ
+
+WORKDIR ${PROJECT_DIR}
+COPY ./ ./
 
 # Enable flutter web
 RUN flutter channel master
