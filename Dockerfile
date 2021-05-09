@@ -34,7 +34,7 @@ RUN flutter build web
 EXPOSE 4040
 
 # Set the server startup script as executable
-RUN ["chmod", "+x", "/usr/local/bin/app/server/server.sh"]
+RUN ["chmod", "+x", "/usr/local/bin/app/server.sh"]
 
 # Start the web server
 ENTRYPOINT [ "/usr/local/bin/app/server/server.sh" ]
