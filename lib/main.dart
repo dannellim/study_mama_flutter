@@ -741,7 +741,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
  Dio getDio(){
    var options = BaseOptions(
-     baseUrl: 'http://localhost:8080/',
+     baseUrl: 'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080/',
      connectTimeout: 5000,
      receiveTimeout: 3000,
      headers: {
