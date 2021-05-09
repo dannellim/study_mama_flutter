@@ -26,8 +26,8 @@ WORKDIR ${PROJECT_DIR}
 COPY ./ ./
 
 # Enable flutter web
-# RUN flutter channel master
-# RUN flutter upgrade
+RUN flutter channel beta
+RUN flutter upgrade
 RUN flutter config --enable-web
 
 # Run flutter doctor
