@@ -7,8 +7,11 @@ RUN apt-get clean
 # Clone the flutter repo
 RUN git clone https://github.com/dannellim/study_mama_flutter.git /usr/local/flutter
 
+# Download flutter
+RUN curl -L https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.7.8+hotfix.4-stable.tar.xz | tar -C /opt -xJ
+
 # Set flutter path
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+ENV PATH=/opt/flutter/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Enable flutter web
 RUN flutter channel beta
