@@ -26,8 +26,8 @@ WORKDIR ${PROJECT_DIR}
 COPY ./ ./
 
 # Enable flutter web
-RUN flutter channel master
-RUN flutter upgrade
+# RUN flutter channel master
+# RUN flutter upgrade
 RUN flutter config --enable-web
 
 # Run flutter doctor
@@ -43,7 +43,7 @@ WORKDIR /usr/local/bin/app
 RUN flutter pub get
 
 # Build the app for the web
-RUN flutter build web
+RUN flutter build web --release --no-sound-null-safety
 
 # Document the exposed port
 EXPOSE 4040
