@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
          }
 
      );
-         dio.get("http://localhost:8080/postService/allPost",queryParameters: {
+         dio.get("/postService/allPost",queryParameters: {
        "current":0,
        "pageSize":100
      },options: options).then((value)  {
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void searchPost(){
     posts.add(null);
-    dio.get("http://localhost:8080/postService/searchPostByKeywordInTitleDescCategory",queryParameters: {
+    dio.get("/postService/searchPostByKeywordInTitleDescCategory",queryParameters: {
       "currentPage":0,
       "keyword":searchTextController.value.text,
       "pageSize":100
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     print("Location ${locationData?.latitude} ${locationData?.longitude}");
-    dio.get("http://localhost:8080/postService/postNearMe",queryParameters: {
+    dio.get("/postService/postNearMe",queryParameters: {
       "currentPage":0,
       "lat":locationData?.latitude,
       "lon":locationData?.longitude,
@@ -363,7 +363,7 @@ class PostDetailPage extends StatefulWidget {
 
   void fetchPost(){
 
-    dio.get("http://localhost:8080/post/${post.id}").then((value)  {
+    dio.get("/post/${post.id}").then((value)  {
 
       Post post= Post.fromJson(value.data);
 
@@ -374,7 +374,7 @@ class PostDetailPage extends StatefulWidget {
   void fetchRecommendation(){
     print("new select");
 
-    dio.get("http://localhost:8080/Recommendation").then((value)  {
+    dio.get("/Recommendation").then((value)  {
       print("size"+value.toString());
 
        List<dynamic> va=value.data as List<dynamic>;
@@ -741,7 +741,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
  Dio getDio(){
    var options = BaseOptions(
-     baseUrl: 'https://localhost:8080/',
+     baseUrl: 'http://localhost:8080/',
      connectTimeout: 5000,
      receiveTimeout: 3000,
      headers: {
