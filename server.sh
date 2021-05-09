@@ -10,6 +10,11 @@ PORT=4040
 echo 'Cleaning port' $PORT '...'
 fuser -k 4040/tcp
 
+echo pwd
+
+cd build/
+echo pwd
+
 # Change directories to the release folder
 cd build/web/
 
