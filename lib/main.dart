@@ -263,9 +263,11 @@ class _MyHomePageState extends State<MyHomePage> {
        "currentPage":0,
        "pageSize":100
      },options: options).then((value)  {
+
        PostPage  postPage = PostPage.fromJson(value.data);
        posts.add(postPage.posts);
        print("size"+postPage.posts.length.toString());
+       print("post"+postPage.posts[0].toJson().toString());
      }).catchError((onError){
        print("Error error $onError");
      });
@@ -359,6 +361,7 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     return Scaffold(
+
 
       body: Stack(
         children: [
@@ -460,6 +463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 return snapshot.hasData?ListView.builder(
                                   itemCount: snapshot.hasData?snapshot.data?.length:0,
                                   itemBuilder: (BuildContext context, int index) {
+
                                     return PostList(snapshot.data![index],(post){
                                       selectedPost.add(post);
                                     });
@@ -706,9 +710,16 @@ class _PostDetailPageState extends State<PostDetailPage> {
                             ),),
                           StreamBuilder<Post>(
                             stream: widget.loadPost.stream,
+
                             builder: (context, snapshot) {
+                              var score=0.0;
+                              try{
+                                score=double.parse(snapshot.data!.score);
+                              }catch(Exception){
+
+                              }
                               var rating =  MRatingBar.builder(
-                                initialRating: 3,
+                                initialRating: score,
                                 itemCount: 5,
                                 itemSize: 25,
                                 itemBuilder: (context, index) {
@@ -1086,7 +1097,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
 Dio getDio(){
    var options = BaseOptions(
-     baseUrl: 'http://localhost:8080/',
+     // baseUrl: 'http://localhost:8080/',
+     baseUrl: 'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080',
      connectTimeout: 5000,
      receiveTimeout: 3000,
      headers: {
