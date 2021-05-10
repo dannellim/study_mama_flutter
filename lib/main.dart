@@ -10,6 +10,7 @@ import 'package:location/location.dart' as loc;
 import 'package:rxdart/rxdart.dart';
 import 'package:study_mama_flutter/logging_interceptor.dart';
 import 'package:http/http.dart' as http;
+import 'package:study_mama_flutter/util/rating.dart';
 
 import 'model.dart';
 
@@ -66,11 +67,189 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController searchTextController = TextEditingController();
   TextEditingController geoController = TextEditingController();
    loc.LocationData? locationData ;
+  final GlobalKey<FormState> _postFormKey = GlobalKey<FormState>();
+  TextEditingController titleTextController = TextEditingController();
+  TextEditingController descTextController = TextEditingController();
+  TextEditingController webTextController = TextEditingController();
+  TextEditingController locTextController = TextEditingController();
+  TextEditingController priceTextController = TextEditingController();
+  TextEditingController contactTextController = TextEditingController();
+  TextEditingController categoryController = TextEditingController();
+
+
+   late AlertDialog postFormDialog;
 
   @override
   void initState()  {
      super.initState();
+     postFormDialog= AlertDialog(
+       title: Text("Create New Post"),
+       content: Form(
+         key: _postFormKey,
+         child: Column(
+           mainAxisSize: MainAxisSize.min,
+           children: [
+             TextFormField(
+               controller: titleTextController,
+               validator: (val) {
+                 print("title txt"+titleTextController.value.text);
+                 return val!.isEmpty ? "Enter Title here" : null;
+               },
+               decoration: InputDecoration(
+                 labelText: 'Post Title',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter post title here',
 
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+             TextFormField(
+               controller: descTextController,
+
+               validator: (val) {
+                 return val!.isEmpty ? "Enter description here" : null;
+               },
+               decoration: InputDecoration(
+                 labelText: 'Description',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter description here',
+
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+
+             TextFormField(
+               controller: priceTextController,
+
+               validator: (val) {
+                 return val!.isEmpty ? "Enter price here" : null;
+               },
+               decoration: InputDecoration(
+                 labelText: 'Price in SGD',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter price here',
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+             TextFormField(
+               controller: categoryController,
+               validator: (val) {
+                 return val!.isEmpty ? "Enter Category here" : null;
+               },
+               decoration: InputDecoration(
+                 labelText: 'Category ',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter category  here',
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+             TextFormField(
+               controller: contactTextController,
+
+               validator: (val) {
+                 return val!.isEmpty ? "Enter Contact Number here" : null;
+               },
+               decoration: InputDecoration(
+                 labelText: 'Contact Number ',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter contact number  here',
+
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+             TextFormField(
+               controller: webTextController,
+               decoration: InputDecoration(
+                 labelText: 'website',
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter website',
+
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+             TextFormField(
+               controller: locTextController,
+               decoration: InputDecoration(
+                 labelText: 'Location',
+                 hintText: "1.3369103,103.697898",
+                 labelStyle: TextStyle(
+                   color: Color(0xFF6200EE),
+                 ),
+                 helperText: 'Enter locations here',
+
+                 enabledBorder: UnderlineInputBorder(
+                   borderSide: BorderSide(color: Color(0xFF6200EE)),
+                 ),
+               ),
+             ),
+
+             Container(
+                 margin: EdgeInsets.only(top: 5),
+                 child: TextButton(onPressed: (){
+                   if(_postFormKey.currentState!.validate()){
+                     var title = titleTextController.value.text;
+                     var desc = descTextController.value.text;
+                     var category = categoryController.value.text;
+                     var contact = contactTextController.value.text;
+                     var price = priceTextController.value.text;
+                     var web = webTextController.value.text;
+                     var loc = locTextController.value.text;
+                     var locCation= loc!=null&&loc.split(",").length==2?{
+                       "lat":double.parse(loc.split(",")[0]),
+                       "lon":double.parse(loc.split(",")[1]),
+                     }:{"":""};
+                     var map = {
+                       "title":title,
+                       "description":desc,
+                       "website":web,
+                       "location":locCation,
+                       "category":category,
+                       "accountId":1,
+                       "status":"Open",
+                       "contact":contact,
+                       "price":price,
+                     };
+
+                     // }
+                     Post post = Post.fromJson(map);
+                     postFormSubmit( post);
+
+                     Navigator.pop(context);
+                     final snackBar = SnackBar(content: Text('Successfully created'));
+                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                   }
+
+                 },
+                   child: Text("submit"),))
+
+           ],
+         ),
+       ),
+     );
      // dio.get('http://www.google.com').then((value) => print(value));
          //
      var options = Options(
@@ -80,8 +259,8 @@ class _MyHomePageState extends State<MyHomePage> {
          }
 
      );
-         dio.get("/postService/allPost",queryParameters: {
-       "current":0,
+     dio.get("/postService/allPost",queryParameters: {
+       "currentPage":0,
        "pageSize":100
      },options: options).then((value)  {
        PostPage  postPage = PostPage.fromJson(value.data);
@@ -105,6 +284,14 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Error error $onError");
     });
   }
+  void postFormSubmit(Post post){
+    dio.post("/postFormSubmit",data: post.toJson()).then((value)  {
+      print("Value"+value.toString());
+    }).catchError((onError){
+      print("Error error $onError");
+    });
+  }
+
   Future<loc.LocationData?> _determinePosition() async {
     loc.Location location = loc.Location();
 
@@ -172,118 +359,173 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+
+      body: Stack(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 10),
+                  margin: EdgeInsets.only(top: 40),
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          width: 300,
-                          child: TextField(
-                            controller: searchTextController,
-                            onSubmitted: (text){
+                        margin: EdgeInsets.only(right: 10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.white),
+                          borderRadius: BorderRadius.all(Radius.circular(20))
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 300,
+                                height: 25,
+                                child: TextField(
+                                  controller: searchTextController,
+                                  onSubmitted: (text){
+                                    searchPost();
+                                  },
+                                  textAlign: TextAlign.left,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Search here by keyword "
+                                  ),
+                                )),
+                            ElevatedButton(onPressed: () {
                               searchPost();
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Search here by keyword "
-                            ),
-                          )),
-                      ElevatedButton(onPressed: () {
-                        searchPost();
 
-                      }, child: Text("Search"),)
+                            }, child: Text("Search"),)
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.all(Radius.circular(20))
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 300,
+                                height: 25,
+                                child: TextField(
+                                  controller: geoController,
+
+                                  onSubmitted: (text){
+                                    searchPostNearMe();
+                                  },
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Search here by distance (km) "
+                                  ),
+                                )),
+                            ElevatedButton(onPressed: () {
+                              searchPostNearMe();
+
+                            }, child: Text("Search"),)
+                          ],
+                        ),
+                      ),
+
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Container(
-                          width: 300,
-                          child: TextField(
-                            controller: geoController,
-                            onSubmitted: (text){
-                              searchPostNearMe();
-                            },
-                            decoration: InputDecoration(
-                                hintText: "Search by distance (km) "
-                            ),
-                          )),
-                      ElevatedButton(onPressed: () {
-                        searchPostNearMe();
+                Flexible(
+                  flex: 1,
 
-                      }, child: Text("Search"),)
-                    ],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 50),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                            child: StreamBuilder<List<Post>>(
+                              stream: posts.stream,
+                              builder: (context, snapshot) {
+                                return snapshot.hasData?ListView.builder(
+                                  itemCount: snapshot.hasData?snapshot.data?.length:0,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return PostList(snapshot.data![index],(post){
+                                      selectedPost.add(post);
+                                    });
+                                  },
+
+                                ):spinkit;
+                              }
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+
+                          child: Container(
+                            child: StreamBuilder<Post>(
+                              stream: selectedPost.stream,
+                              builder: (context, snapshot) {
+                                return snapshot.hasData?PostDetailPage(title: 'Detail',post: snapshot.data!,):Container();
+                              }
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 )
               ],
             ),
-            Flexible(
-              flex: 1,
-
-              child: Container(
-                margin: EdgeInsets.only(top: 50),
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        child: StreamBuilder<List<Post>>(
-                          stream: posts.stream,
-                          builder: (context, snapshot) {
-                            return snapshot.hasData?ListView.builder(
-                              itemCount: snapshot.hasData?snapshot.data?.length:0,
-                              itemBuilder: (BuildContext context, int index) {
-                                return PostList(snapshot.data![index],(post){
-                                  selectedPost.add(post);
-                                });
-                              },
-
-                            ):spinkit;
-                          }
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      flex: 1,
-
-                      child: Container(
-                        child: StreamBuilder<Post>(
-                          stream: selectedPost.stream,
-                          builder: (context, snapshot) {
-                            return snapshot.hasData?PostDetailPage(title: 'Detail',post: snapshot.data!,):Container();
-                          }
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+          ),
+          Positioned(
+            right: 10,
+            top: 10,
+            child: Container(
+              margin: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.all(10),
+              alignment: Alignment.bottomRight,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.all(Radius.circular(20))
               ),
-            )
-          ],
-        ),
+              child: Text("Login"),
+            ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 20,
+            child: FloatingActionButton(
+              backgroundColor: const Color(0xff03dac6),
+              foregroundColor: Colors.black,
+              onPressed: () {
+                showDialog(context: context, builder: (con){
+                  return postFormDialog;
+                });
+
+              },
+              child: Icon(Icons.add),
+            ),
+          )
+        ],
       )
 
     );
 
   }
 }
+
 class PostList extends StatelessWidget{
   Post post;
   Function(Post) onSelect;
@@ -339,33 +581,47 @@ class PostList extends StatelessWidget{
   }
 
 }
+
 class PostDetailPage extends StatefulWidget {
   Post post;
   var dio= getDio();
   BehaviorSubject<Post> loadPost = BehaviorSubject();
   BehaviorSubject<List<RecommendPost>> recomendationPost = BehaviorSubject();
+  TextEditingController commentController = TextEditingController();
 
   PostDetailPage({Key? key, required this.title,required this.post}) {
      fetchPost();
      fetchRecommendation();
   }
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+  void submitComment(Function onSuccess,Function onFail){
+
+    dio.post("/commentSubmit",data: {
+      "postId":post.id,
+      "accountId":0,
+      "accountName":"",
+      "description":commentController.value.text
+    }).then((value)  {
+      print("value."+value.toString());
+      fetchPost();
+      commentController.clear();
+      onSuccess();
+    }).catchError((onError){
+      print("error."+onError.toString());
+      onFail();
+    });
+  }
+
 
   final String title;
 
   void fetchPost(){
-
+    print("POST ID"+post.id);
     dio.get("/post/${post.id}").then((value)  {
 
       Post post= Post.fromJson(value.data);
+      print("POST value"+value.toString());
 
       loadPost.add(post);
 
@@ -394,13 +650,31 @@ class PostDetailPage extends StatefulWidget {
 
 class _PostDetailPageState extends State<PostDetailPage> {
 
-
-
+  var rate=1.0;
 
   @override
   void initState() {
     super.initState();
 
+  }
+
+  void submitRating(Function onSuccess,Function onFail){
+
+    print("on submit" +widget.post.id);
+    widget.dio.post("/rateSubmit",data: {
+      "postId":widget.post.id,
+      "accountId":0,
+      "rateScore":rate,
+    }).then((value)  {
+
+      print("Rate"+rate.toString());
+      widget.fetchPost();
+      rate=0;
+      onSuccess();
+    }).catchError((onError){
+      print("error."+onError.toString());
+      onFail();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -430,6 +704,58 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold
                             ),),
+                          StreamBuilder<Post>(
+                            stream: widget.loadPost.stream,
+                            builder: (context, snapshot) {
+                              var rating =  MRatingBar.builder(
+                                initialRating: 3,
+                                itemCount: 5,
+                                itemSize: 25,
+                                itemBuilder: (context, index) {
+                                  switch (index) {
+                                    case 0:
+                                      return Icon(
+                                        Icons.sentiment_very_dissatisfied,
+                                        color: Colors.red,
+                                      );
+                                    case 1:
+                                      return Icon(
+                                        Icons.sentiment_dissatisfied,
+                                        color: Colors.redAccent,
+                                      );
+                                    case 2:
+                                      return Icon(
+                                        Icons.sentiment_neutral,
+                                        color: Colors.amber,
+                                      );
+                                    case 3:
+                                      return Icon(
+                                        Icons.sentiment_satisfied,
+                                        color: Colors.lightGreen,
+                                      );
+                                    case 4:
+                                      return Icon(
+                                        Icons.sentiment_very_satisfied,
+                                        color: Colors.green,
+                                      );
+                                    default:
+                                      return Icon(Icons.add);
+                                  }
+                                }, onRatingUpdate: (double value) {  },);
+                              return Container(
+                                  margin: EdgeInsets.only(top: 20,bottom: 5),
+                                  child: Row(
+                                    children: [
+                                      Text("Rating  : "),
+                                      GestureDetector(
+                                          onTap: (){
+
+                                          },
+                                          child: rating)
+                                    ],
+                                  ));
+                            }
+                          ),
 
                           Container(
                               constraints: BoxConstraints(
@@ -553,11 +879,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  TextField(),
+                                                  TextField(
+                                                    controller: widget.commentController,
+                                                  ),
                                                   Container(
                                                     margin: EdgeInsets.only(top: 5),
                                                     child: TextButton(onPressed: (){
-                                                      Navigator.pop(con);
+
+                                                      widget.submitComment((){
+                                                        Navigator.pop(con);
+
+                                                      },(){
+
+                                                      });
                                                     },
                                                     child: Text("Comment now"),))
 
@@ -623,6 +957,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                               },
                                               onRatingUpdate: (rating) {
                                                 print(rating);
+                                                rate=rating;
                                               },);
                                           showDialog(context: context, builder: (con){
                                             return AlertDialog(
@@ -634,7 +969,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                                      Container(
                                                        margin: EdgeInsets.only(top: 5),
                                                        child: TextButton(onPressed: (){
-                                                         Navigator.pop(con);
+                                                         submitRating((){
+
+                                                           Navigator.pop(con);
+
+                                                         },(){
+                                                           Navigator.pop(con);
+
+                                                         });
                                                        }, child: Text("Rate now")),
                                                      )
                                                    ],
@@ -659,6 +1001,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                     return ListView.builder(
                                       itemCount: snapshot.hasData?snapshot.data!.comments.length:0,
                                       itemBuilder: (BuildContext context, int index) {
+                                        var data=snapshot.data!.comments[index].accountName;
+                                        var accName= (data!=null&&data.isNotEmpty)?snapshot.data!.comments[index].accountName:"anonymous";
                                         return Container(
                                             margin: EdgeInsets.only(top: 5,bottom: 5),
                                             decoration: BoxDecoration(
@@ -670,7 +1014,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                Text("Anonymous",style: TextStyle(
+                                                Text(accName!,
+                                                  style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontStyle: FontStyle.italic,
                                                   fontSize: 12
@@ -678,7 +1023,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
                                                 Container(
                                                     margin: EdgeInsets.only(top: 5,left: 5),
-                                                    child: Text(snapshot.data!.comments[index])),
+                                                    child: Text(snapshot.data!.comments[index].description)),
                                               ],
                                             ));
                                       },
@@ -691,38 +1036,38 @@ class _PostDetailPageState extends State<PostDetailPage> {
                         ],
                       ),
                     ),
-                    Flexible(
-                      flex: 1,
-                      child: Container(
-                        padding: EdgeInsets.only(bottom: 10,top: 50,left: 20),
-                        child: FlutterMap(
+                   widget.post.location!=null? Flexible(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 10,top: 50,left: 20),
+                  child: FlutterMap(
 
-                          options: MapOptions(
-                            center: LatLng(1.3368959,103.6978811),
-                            zoom: 12.0,
-                          ),
-                          layers: [
-                            TileLayerOptions(
-                                urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                subdomains: ['a', 'b', 'c']
-                            ),
-                            MarkerLayerOptions(
-                              markers: [
-                                Marker(
-                                  width: 80.0,
-                                  height: 80.0,
-                                  point: LatLng(widget.post.location?.lat,widget.post.location?.lon),
-                                  builder: (ctx) =>
-                                      Container(
-                                        child: Icon(Icons.location_on,color: Colors.blue,),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                    options: MapOptions(
+                      center: LatLng(1.3368959,103.6978811),
+                      zoom: 12.0,
+                    ),
+                    layers: [
+                      TileLayerOptions(
+                          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          subdomains: ['a', 'b', 'c']
                       ),
-                    )
+                      MarkerLayerOptions(
+                        markers: [
+                          Marker(
+                            width: 80.0,
+                            height: 80.0,
+                            point: LatLng(widget.post.location?.lat,widget.post.location?.lon),
+                            builder: (ctx) =>
+                                Container(
+                                  child: Icon(Icons.location_on,color: Colors.blue,),
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ):Container()
                   ],
                 ),
 
@@ -739,14 +1084,15 @@ class _PostDetailPageState extends State<PostDetailPage> {
 
 }
 
- Dio getDio(){
+Dio getDio(){
    var options = BaseOptions(
      baseUrl: 'http://localhost:8080/',
      connectTimeout: 5000,
      receiveTimeout: 3000,
      headers: {
        "Access-Control-Allow-Origin":"*",
-       "Access-Control-Allow-Credentials":true
+       "Access-Control-Allow-Credentials":true,
+       "Access-Control-Allow-Methods":"GET,POST,PUT,DELETE"
      }
 
    );

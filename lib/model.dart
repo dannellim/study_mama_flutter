@@ -71,7 +71,11 @@ class Post {
   String price;
   String category;
   String accountId;
-  List<String> comments;
+  String score;
+  String contact;
+  List<Comment> comments;
+
+
 
   Post(
       this.id,
@@ -84,23 +88,36 @@ class Post {
         this.editedDt,
         this.price,
         this.category,
-        this.accountId,this.comments);
+        this.accountId,this.score,this.contact,this.comments);
 
-  Post.fromJson(Map<String, dynamic> json):
-        id = json['id'],
-  title = json['title'],
-  description = json['description'],
-  website = json['website'],
-  location = json['location'] != null?
-  new Location.fromJson(json['location'])
-      : null,
-  status = json['status'].toString(),
-  postDt = json['post_dt'],
-  editedDt = json['edited_dt'],
-  price = json['price'],
-  category = json['category'],
-  comments =json['comments']!=null? List.from(json['comments']):[],
-  accountId = json['accountId'].toString();
+ factory Post.fromJson(Map<String, dynamic> json){
+
+
+  var id = json['id'],
+    title = json['title'],
+   description = json['description'],
+   website = json['website'],
+   location = json['location'] != null?
+   new Location.fromJson(json['location'])
+       : null,
+   status = json['status'].toString(),
+   postDt = json['post_dt'],
+   editedDt = json['edited_dt'],
+   price = json['price'],
+   category = json['category'],
+    score = json['score'].toString(),
+      contact = json['contact'].toString(),
+   accountId = json['accountId'].toString();
+  List<Comment> comments = [];
+  if(json['comments']!=null){
+    json['comments'].forEach((v) {
+      comments.add(new Comment.fromJson(v));
+    });
+
+ }
+  return Post(id, title, description, website, location, status, postDt, editedDt, price, category, accountId,score, contact,comments);
+
+ }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -110,8 +127,11 @@ class Post {
     data['website'] = this.website;
     if (this.location != null) {
       data['location'] = this.location?.toJson();
+      data["gpsX"] =this.location?.lat;
+      data["gpsY"] =this.location?.lon;
     }
     data['status'] = this.status;
+    data['contact'] = this.contact;
     data['post_dt'] = this.postDt;
     data['edited_dt'] = this.editedDt;
     data['price'] = this.price;
@@ -248,6 +268,38 @@ class RecommendPost {
     data['category'] = this.category;
     data['contact'] = this.contact;
     data['creationDate'] = this.creationDate;
+    return data;
+  }
+}
+class Comment {
+  int postId;
+  int accountId;
+  String? accountName;
+  int commentId;
+  String description;
+
+  Comment(
+      this.postId,
+        this.accountId,
+        this.accountName,
+        this.commentId,
+        this.description);
+
+  Comment.fromJson(Map<String, dynamic> json):
+    postId = json['postId'],
+    accountId = json['accountId'],
+    accountName = json['accountName'],
+    commentId = json['commentId'],
+    description = json['description'];
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['postId'] = this.postId;
+    data['accountId'] = this.accountId;
+    data['accountName'] = this.accountName;
+    data['commentId'] = this.commentId;
+    data['description'] = this.description;
     return data;
   }
 }
