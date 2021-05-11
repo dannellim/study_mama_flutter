@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:study_mama_flutter/DataSource/Login/loginRemoteRepository.dart';
+import 'package:study_mama_flutter/DataSource/Profile/profileRemoteRepository.dart';
+import 'package:study_mama_flutter/Model/getProfileModel.dart';
 import 'package:study_mama_flutter/Model/loginModel.dart';
 import 'package:study_mama_flutter/Screen/profileDialog.dart';
 import 'package:study_mama_flutter/util/color.dart';
@@ -214,6 +216,9 @@ class _GetLoginState extends State<Login> {
                                 getLogin(usernameController.text,
                                     passwordController.text);
                               },
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(5)),
                               padding: EdgeInsets.fromLTRB(10, 18, 10, 20),
                               color: themeDarkColor,
                               child: Text(
@@ -306,10 +311,13 @@ class _GetLoginState extends State<Login> {
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
             isSignUp_BS.add(false);
 
+
           } else {
             Toast.show("Register Fail", context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
           }
+
+
         }).catchError((onError){
           setState(() {
             showLoadingBar = false;
@@ -336,6 +344,30 @@ class _GetLoginState extends State<Login> {
             print("token"+token);
             Toast.show("Login Success", context,
                 duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+
+            Map<String, dynamic> map1 = {
+              "username": loginRequest.username,
+              "password": loginRequest.password,
+              "token":token
+            };
+            ProfileRemoteRepository _profileRemoteRepository = ProfileRemoteRepository();
+
+            _profileRemoteRepository.getProfile(map1).then((value) {
+
+              if (value.statusCode == 200) {
+                GetProfileResponse response = GetProfileResponse.fromJson(value.data);
+                accountID = response.id.toString();
+                loginAccName = username;
+
+              } else {
+                Toast.show("Get Profile Fail", context,
+                    duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+              }
+            }).catchError((onError) {
+
+              Toast.show("Error : " + onError.toString(), context,
+                  duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+            });
 
               // showDialog(
               //     context: context,
