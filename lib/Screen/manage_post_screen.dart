@@ -81,11 +81,10 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true
     });
-    dio.delete("/postDelete",
+    dio.post("/postDelete",
         queryParameters: {
           "postId": postId,
-        },
-        options: options)
+        },)
         .then((value) {
 
       final snackBar = SnackBar(content: Text('Successfully deleted'));
@@ -95,7 +94,7 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
       print("Error error $onError");
     });
     dio
-        .delete("/postService/post",
+        .post("/postService/postDelete",
         queryParameters: {
           "id": postId,
         },
@@ -251,9 +250,17 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
                                   child: RaisedButton(onPressed: (){
 
                                   }, color: themeColor,
-                                    child: Container(
-                                        padding: EdgeInsets.only(bottom: 5,top: 5),
-                                        child: Text("Create Post",style: TextStyle(color: Colors.white),)),
+                                    child: InkWell(
+                                      onTap: (){
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => PostForm(onSuccess: (){
+                                              getAllPost();
+                                            },)));
+                                      },
+                                      child: Container(
+                                          padding: EdgeInsets.only(bottom: 15,top: 15,left: 5,right: 5),
+                                          child: Text("Create Post",style: TextStyle(color: Colors.white),)),
+                                    ),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
                                 ),
                                 FractionallySizedBox(

@@ -314,7 +314,7 @@ class PostFormState extends State<PostForm>{
                          "location":locCation,
                          "category":category,
                          "accountId":accountID,
-                         "status":status.value?"1":"0",
+                         "status":status.value?"OPEN":"CLOSED",
                          "contact":contact,
                          "price":price,
                        };

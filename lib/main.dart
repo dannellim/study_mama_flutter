@@ -191,8 +191,19 @@ class _MyHomePageState extends State<MyHomePage> {
       print("Error error $onError");
     });
   }
-
   @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        getAllPost();
+        }
+
+    }
+
+
+
+
+@override
   Widget build(BuildContext context) {
     final spinkit = SpinKitCircle(
       itemBuilder: (BuildContext context, int index) {
@@ -1070,6 +1081,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 Dio getDio(){
    var options = BaseOptions(
      // baseUrl: 'http://localhost:8080/',
+     // baseUrl: 'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080',
      baseUrl: 'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080',
      connectTimeout: 5000,
      receiveTimeout: 3000,
