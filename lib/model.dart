@@ -92,7 +92,6 @@ class Post {
 
  factory Post.fromJson(Map<String, dynamic> json){
 
-
   var id = json['id'],
     title = json['title'],
    description = json['description'],
@@ -119,9 +118,41 @@ class Post {
 
  }
 
+
+  factory Post.fromJsonDB(Map<String, dynamic> json){
+
+    var id = json['postId'].toString(),
+        title = json['title'],
+        description = json['description'],
+        website = json['website'],
+        status = json['status'].toString(),
+        postDt = json['post_dt'],
+        editedDt = json['edited_dt'],
+        price = json['price'],
+        category = json['category'],
+        score = json['score'].toString(),
+        contact = json['contact'].toString(),
+        accountId = json['accountId'].toString();
+      List<Comment> comments = [];
+
+
+    var gpsX= json['gpsX'] ;
+    var gpsY= json['gpsY'];
+    var location =Location(gpsX, gpsY);
+    if(json['comments']!=null){
+      json['comments'].forEach((v) {
+        comments.add(new Comment.fromJson(v));
+      });
+
+    }
+    return Post(id, title, description, website, location, status, postDt, editedDt, price, category, accountId,score, contact,comments);
+
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['postId'] = this.id;
     data['title'] = this.title;
     data['description'] = this.description;
     data['website'] = this.website;

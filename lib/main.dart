@@ -8,15 +8,35 @@ import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:location/location.dart' as loc;
 import 'package:rxdart/rxdart.dart';
+import 'package:study_mama_flutter/Model/loginModel.dart';
+import 'package:study_mama_flutter/Screen/manage_post_screen.dart';
 import 'package:study_mama_flutter/logging_interceptor.dart';
 import 'package:http/http.dart' as http;
+import 'package:study_mama_flutter/util/color.dart';
+import 'package:study_mama_flutter/util/constant.dart';
 import 'package:study_mama_flutter/util/rating.dart';
 
+import 'Screen/loginScreen.dart';
+import 'Screen/profileDialog.dart';
 import 'model.dart';
 
 void main() {
   runApp(MyApp());
 }
+Map<int, Color> color =
+{
+  50:Color(0xffE6E6EB),
+  100:Color(0xffC1C1CC),
+  200:Color(0xff9797AA),
+  300:Color(0xff6D6D88),
+  400:Color(0xff4E4E6F),
+  500:Color(0xff2F2F55),
+  600:Color(0xff2A2A4E),
+  700:Color(0xff232344),
+  800:Color(0xff1D1D3B),
+  900:Color(0xff12122A),
+};
+MaterialColor myColor = MaterialColor(0xFF880E4F, color);
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -26,16 +46,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'StudyMama',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primaryColor: themeColor,
+        fontFamily: 'Montserrat'
       ),
       home: MyHomePage(title: 'Welcome to StudyMama'),
     );
@@ -67,224 +79,54 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController searchTextController = TextEditingController();
   TextEditingController geoController = TextEditingController();
    loc.LocationData? locationData ;
-  final GlobalKey<FormState> _postFormKey = GlobalKey<FormState>();
-  TextEditingController titleTextController = TextEditingController();
-  TextEditingController descTextController = TextEditingController();
-  TextEditingController webTextController = TextEditingController();
-  TextEditingController locTextController = TextEditingController();
-  TextEditingController priceTextController = TextEditingController();
-  TextEditingController contactTextController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
-
-
-   late AlertDialog postFormDialog;
 
   @override
   void initState()  {
      super.initState();
-     postFormDialog= AlertDialog(
-       title: Text("Create New Post"),
-       content: Form(
-         key: _postFormKey,
-         child: Column(
-           mainAxisSize: MainAxisSize.min,
-           children: [
-             TextFormField(
-               controller: titleTextController,
-               validator: (val) {
-                 print("title txt"+titleTextController.value.text);
-                 return val!.isEmpty ? "Enter Title here" : null;
-               },
-               decoration: InputDecoration(
-                 labelText: 'Post Title',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter post title here',
-
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-             TextFormField(
-               controller: descTextController,
-
-               validator: (val) {
-                 return val!.isEmpty ? "Enter description here" : null;
-               },
-               decoration: InputDecoration(
-                 labelText: 'Description',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter description here',
-
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-
-             TextFormField(
-               controller: priceTextController,
-
-               validator: (val) {
-                 return val!.isEmpty ? "Enter price here" : null;
-               },
-               decoration: InputDecoration(
-                 labelText: 'Price in SGD',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter price here',
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-             TextFormField(
-               controller: categoryController,
-               validator: (val) {
-                 return val!.isEmpty ? "Enter Category here" : null;
-               },
-               decoration: InputDecoration(
-                 labelText: 'Category ',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter category  here',
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-             TextFormField(
-               controller: contactTextController,
-
-               validator: (val) {
-                 return val!.isEmpty ? "Enter Contact Number here" : null;
-               },
-               decoration: InputDecoration(
-                 labelText: 'Contact Number ',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter contact number  here',
-
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-             TextFormField(
-               controller: webTextController,
-               decoration: InputDecoration(
-                 labelText: 'website',
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter website',
-
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-             TextFormField(
-               controller: locTextController,
-               decoration: InputDecoration(
-                 labelText: 'Location',
-                 hintText: "1.3369103,103.697898",
-                 labelStyle: TextStyle(
-                   color: Color(0xFF6200EE),
-                 ),
-                 helperText: 'Enter locations here',
-
-                 enabledBorder: UnderlineInputBorder(
-                   borderSide: BorderSide(color: Color(0xFF6200EE)),
-                 ),
-               ),
-             ),
-
-             Container(
-                 margin: EdgeInsets.only(top: 5),
-                 child: TextButton(onPressed: (){
-                   if(_postFormKey.currentState!.validate()){
-                     var title = titleTextController.value.text;
-                     var desc = descTextController.value.text;
-                     var category = categoryController.value.text;
-                     var contact = contactTextController.value.text;
-                     var price = priceTextController.value.text;
-                     var web = webTextController.value.text;
-                     var loc = locTextController.value.text;
-                     var locCation= loc!=null&&loc.split(",").length==2?{
-                       "lat":double.parse(loc.split(",")[0]),
-                       "lon":double.parse(loc.split(",")[1]),
-                     }:{"":""};
-                     var map = {
-                       "title":title,
-                       "description":desc,
-                       "website":web,
-                       "location":locCation,
-                       "category":category,
-                       "accountId":1,
-                       "status":"Open",
-                       "contact":contact,
-                       "price":price,
-                     };
-
-                     // }
-                     Post post = Post.fromJson(map);
-                     postFormSubmit( post);
-
-                     Navigator.pop(context);
-                     final snackBar = SnackBar(content: Text('Successfully created'));
-                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                   }
-
-                 },
-                   child: Text("submit"),))
-
-           ],
-         ),
-       ),
-     );
      // dio.get('http://www.google.com').then((value) => print(value));
          //
-     var options = Options(
-         headers: {
-           "Access-Control-Allow-Origin":"*",
-           "Access-Control-Allow-Credentials":true
-         }
 
-     );
-     dio.get("/postService/allPost",queryParameters: {
-       "currentPage":0,
-       "pageSize":100
-     },options: options).then((value)  {
+     getAllPost();
+  }
 
-       PostPage  postPage = PostPage.fromJson(value.data);
-       posts.add(postPage.posts);
-       print("size"+postPage.posts.length.toString());
-       print("post"+postPage.posts[0].toJson().toString());
-     }).catchError((onError){
-       print("Error error $onError");
-     });
+  void getAllPost(){
+    var options = Options(
+        headers: {
+          "Access-Control-Allow-Origin":"*",
+          "Access-Control-Allow-Credentials":true
+        }
+
+    );
+    dio.get("/postService/allPost",queryParameters: {
+      "currentPage":0,
+      "pageSize":100
+    },options: options).then((value)  {
+
+      PostPage  postPage = PostPage.fromJson(value.data);
+      posts.add(postPage.posts);
+      print("size"+postPage.posts.length.toString());
+      print("post"+postPage.posts[0].toJson().toString());
+    }).catchError((onError){
+      print("Error error $onError");
+    });
   }
 
   void searchPost(){
     posts.add(null);
-    dio.get("/postService/searchPostByKeywordInTitleDescCategory",queryParameters: {
-      "currentPage":0,
-      "keyword":searchTextController.value.text,
-      "pageSize":100
-    }).then((value)  {
-      PostPage  postPage = PostPage.fromJson(value.data);
-      posts.add(postPage.posts);
-    }).catchError((onError){
-      print("Error error $onError");
-    });
+    if(searchTextController.value.text.isNotEmpty){
+      dio.get("/postService/searchPostByKeywordInTitleDescCategory",queryParameters: {
+        "currentPage":0,
+        "keyword":searchTextController.value.text,
+        "pageSize":100
+      }).then((value)  {
+        PostPage  postPage = PostPage.fromJson(value.data);
+        posts.add(postPage.posts);
+      }).catchError((onError){
+        print("Error error $onError");
+      });
+    }else{
+      getAllPost();
+    }
   }
   void postFormSubmit(Post post){
     dio.post("/postFormSubmit",data: post.toJson()).then((value)  {
@@ -362,7 +204,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     return Scaffold(
 
-
       body: Stack(
         children: [
           Container(
@@ -372,7 +213,111 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(left: 20,right: 20),
+                  child: Row(
+
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "STUDY",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800, fontSize: 22),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "MAMA",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 22),
+                              ),
+                            ],
+                          )),
+                      Container(
+
+                        child: StreamBuilder<LoginRequest>(
+                            stream: loginData.stream,
+                            builder: (context, snapshot) {
+                              return Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(right: 10,top: 10),
+                                    child: InkWell(
+                                      onTap: (){
+
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context) => ManagePostsScreen()));
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(10),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: snapshot.hasData?themeColor:Colors.white),
+                                            borderRadius: BorderRadius.all(Radius.circular(20))
+                                        ),
+                                        child: snapshot.hasData?Text("Manage Posts"):Container(),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+
+                                    margin: EdgeInsets.only(right: 10,top: 10),
+                                    child: InkWell(
+                                      onTap: (){
+                                        if(snapshot.hasData){
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder: (context) => Profile()));
+                                        }
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.bottomRight,
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(color: snapshot.hasData?themeColor:Colors.white),
+                                            borderRadius: BorderRadius.all(Radius.circular(20))
+                                        ),
+                                        child: snapshot.hasData?InkWell(
+                                          onTap: (){
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Profile()));
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(snapshot.data!.username),
+                                              Container(
+                                                child: ClipRRect(
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    child:Icon(
+                                                      Icons.person_outline_rounded,
+                                                      size: 20,)),
+                                              )
+                                            ],
+                                          ),
+                                        ):RaisedButton(
+                                          onPressed: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) => Login()));
+                                          },
+                                          color: themeColor,
+                                          child: Text("Sign in",style: TextStyle(color: Colors.white),),),
+                                      ),
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -403,10 +348,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                       hintText: "Search here by keyword "
                                   ),
                                 )),
-                            ElevatedButton(onPressed: () {
+                            RaisedButton(onPressed: () {
                               searchPost();
 
-                            }, child: Text("Search"),)
+                            },
+                              color: themeDarkColor,
+                              child: Text("Search",
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                              ),)
                           ],
                         ),
                       ),
@@ -436,10 +387,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                       hintText: "Search here by distance (km) "
                                   ),
                                 )),
-                            ElevatedButton(onPressed: () {
+                            RaisedButton(onPressed: () {
                               searchPostNearMe();
 
-                            }, child: Text("Search"),)
+                            },
+                              color: themeDarkColor,
+                              child: Text("Search",style: TextStyle(
+                                color: Colors.white
+                              ),),)
                           ],
                         ),
                       ),
@@ -449,7 +404,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Flexible(
                   flex: 1,
-
                   child: Container(
                     margin: EdgeInsets.only(top: 50),
                     child: Row(
@@ -463,7 +417,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 return snapshot.hasData?ListView.builder(
                                   itemCount: snapshot.hasData?snapshot.data?.length:0,
                                   itemBuilder: (BuildContext context, int index) {
-
                                     return PostList(snapshot.data![index],(post){
                                       selectedPost.add(post);
                                     });
@@ -476,7 +429,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Flexible(
                           flex: 1,
-
                           child: Container(
                             child: StreamBuilder<Post>(
                               stream: selectedPost.stream,
@@ -493,35 +445,50 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          Positioned(
-            right: 10,
-            top: 10,
-            child: Container(
-              margin: EdgeInsets.only(right: 10),
-              padding: EdgeInsets.all(10),
-              alignment: Alignment.bottomRight,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.all(Radius.circular(20))
-              ),
-              child: Text("Login"),
-            ),
-          ),
-          Positioned(
-            right: 10,
-            bottom: 20,
-            child: FloatingActionButton(
-              backgroundColor: const Color(0xff03dac6),
-              foregroundColor: Colors.black,
-              onPressed: () {
-                showDialog(context: context, builder: (con){
-                  return postFormDialog;
-                });
+          // Positioned(
+          //   right: 10,
+          //   top: 40,
+          //   child: StreamBuilder<LoginRequest>(
+          //     stream: loginData.stream,
+          //     builder: (context, snapshot) {
+          //       return Container(
+          //         margin: EdgeInsets.only(right: 10),
+          //         padding: EdgeInsets.all(10),
+          //         alignment: Alignment.bottomRight,
+          //         decoration: BoxDecoration(
+          //             border: Border.all(color: snapshot.hasData?themeColor:Colors.white),
+          //             borderRadius: BorderRadius.all(Radius.circular(20))
+          //         ),
+          //         child: snapshot.hasData?GestureDetector(
+          //           onTap: (){
+          //             Navigator.push(context,
+          //                 MaterialPageRoute(builder: (context) => Profile()));
+          //           },
+          //           child: Row(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               Text(snapshot.data!.username),
+          //               Container(
+          //                child: ClipRRect(
+          //                   borderRadius: BorderRadius.circular(8.0),
+          //                   child:Icon(
+          //                  Icons.person_outline_rounded,
+          //                  size: 20,)),
+          //                 )
+          //             ],
+          //           ),
+          //         ):RaisedButton(
+          //           onPressed: () {
+          //             Navigator.push(context,
+          //                 MaterialPageRoute(builder: (context) => Login()));
+          //           },
+          //           color: themeColor,
+          //           child: Text("Sign in",style: TextStyle(color: Colors.white),),),
+          //       );
+          //     }
+          //   ),
+          // ),
 
-              },
-              child: Icon(Icons.add),
-            ),
-          )
         ],
       )
 
@@ -572,7 +539,7 @@ class PostList extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Price  : ${post.price} SGD"),
-                    Text("Date  : ${f.format(DateTime.fromMillisecondsSinceEpoch(post.postDt))}"),
+                    Text("Date  : ${post.postDt.toString().contains("null")?"Not Available":f.format(DateTime.fromMillisecondsSinceEpoch(post.postDt))}"),
 
                   ],
                 ),
@@ -596,6 +563,7 @@ class PostDetailPage extends StatefulWidget {
   PostDetailPage({Key? key, required this.title,required this.post}) {
      fetchPost();
      fetchRecommendation();
+     print("POST"+post.status);
   }
 
 
@@ -603,7 +571,7 @@ class PostDetailPage extends StatefulWidget {
 
     dio.post("/commentSubmit",data: {
       "postId":post.id,
-      "accountId":0,
+      "accountId":accountID,
       "accountName":"",
       "description":commentController.value.text
     }).then((value)  {
@@ -667,7 +635,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     print("on submit" +widget.post.id);
     widget.dio.post("/rateSubmit",data: {
       "postId":widget.post.id,
-      "accountId":0,
+      "accountId":accountID,
       "rateScore":rate,
     }).then((value)  {
 
@@ -789,8 +757,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 children: [
                                   Text("Status  :  "),
                                   Chip(
-                                      backgroundColor: widget.post.status=="1"?Colors.green:Colors.red,
-                                      label: Text(" ${widget.post.status=="1"?"OPEN":"CLOSED"}",style: TextStyle(
+                                      backgroundColor: widget.post.status.contains("1")?Colors.red:Colors.green,
+                                      label: Text(" ${widget.post.status.contains("1")?"CLOSED":"ACTIVE"}",style: TextStyle(
                                           color: Colors.white
                                       ),))
                                 ],
@@ -801,7 +769,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               child: Text("Price  : ${widget.post.price} SGD")),
                           Container(
                               margin: EdgeInsets.only(top: 5,bottom: 10),
-                              child: Text("Post Date  : ${f.format(DateTime.fromMillisecondsSinceEpoch(widget.post.postDt))}")),
+                              child: Text("Post Date  : ${widget.post.postDt.toString().contains("null")?"Not Available":f.format(DateTime.fromMillisecondsSinceEpoch(widget.post.postDt))}")),
 
                         ],
                       ),
