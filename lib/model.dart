@@ -138,7 +138,7 @@ class Post {
 
     var gpsX= json['gpsX'] ;
     var gpsY= json['gpsY'];
-    var location =Location(gpsX, gpsY);
+    var location =Location(gpsY,gpsX );
     if(json['comments']!=null){
       json['comments'].forEach((v) {
         comments.add(new Comment.fromJson(v));
@@ -158,8 +158,8 @@ class Post {
     data['website'] = this.website;
     if (this.location != null) {
       data['location'] = this.location?.toJson();
-      data["gpsX"] =this.location?.lat;
-      data["gpsY"] =this.location?.lon;
+      data["gpsX"] =this.location?.lon;
+      data["gpsY"] =this.location?.lat;
     }
     data['status'] = this.status;
     data['contact'] = this.contact;

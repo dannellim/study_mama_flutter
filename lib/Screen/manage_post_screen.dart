@@ -110,129 +110,130 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
     return Scaffold(
         key: key,
         backgroundColor: backgroundColor,
-        body: Stack(
-          children: [
-            ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "STUDY",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800, fontSize: 22),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "MAMA",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 22),
+                              ),
+                            ],
+                          )),
+                    ),
+                    Container(
+                      child: StreamBuilder<LoginRequest>(
+                          stream: loginData.stream,
+                          builder: (context, snapshot) {
+                            return Row(
                               children: [
-                                Text(
-                                  "STUDY",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w800, fontSize: 22),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  "MAMA",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w300, fontSize: 22),
+                                Container(
+                                  margin: EdgeInsets.only(right: 10, top: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      if (snapshot.hasData) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => Profile()));
+                                      }
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.bottomRight,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: snapshot.hasData
+                                                  ? themeColor
+                                                  : Colors.white),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                      child: snapshot.hasData
+                                          ? InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Profile()));
+                                              },
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(snapshot.data!.username),
+                                                  Container(
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8.0),
+                                                        child: Icon(
+                                                          Icons
+                                                              .person_outline_rounded,
+                                                          size: 20,
+                                                        )),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : RaisedButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Login()));
+                                              },
+                                              color: themeColor,
+                                              child: Text(
+                                                "Sign in",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
+                                  ),
                                 ),
                               ],
-                            )),
-                      ),
-                      Container(
-                        child: StreamBuilder<LoginRequest>(
-                            stream: loginData.stream,
-                            builder: (context, snapshot) {
-                              return Row(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 10, top: 10),
-                                    child: InkWell(
-                                      onTap: () {
-                                        if (snapshot.hasData) {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Profile()));
-                                        }
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.bottomRight,
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: snapshot.hasData
-                                                    ? themeColor
-                                                    : Colors.white),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        child: snapshot.hasData
-                                            ? InkWell(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Profile()));
-                                                },
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text(snapshot.data!.username),
-                                                    Container(
-                                                      child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  8.0),
-                                                          child: Icon(
-                                                            Icons
-                                                                .person_outline_rounded,
-                                                            size: 20,
-                                                          )),
-                                                    )
-                                                  ],
-                                                ),
-                                              )
-                                            : RaisedButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Login()));
-                                                },
-                                                color: themeColor,
-                                                child: Text(
-                                                  "Sign in",
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      )
-                    ],
-                  ),
+                            );
+                          }),
+                    )
+                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 20,top: 50),
-                    child: Text(
-                      "My Posts",
-                      style: TextStyle(color: themeColor, fontSize: 18),
-                    )),
-                Container(
-                  child: StreamBuilder<List<Post>>(
-                      stream: myPosts.stream,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 20,top: 50),
+                  child: Text(
+                    "My Posts",
+                    style: TextStyle(color: themeColor, fontSize: 18),
+                  )),
+              Container(
+                child: StreamBuilder<List<Post>>(
+                    stream: myPosts.stream,
                     builder: (context, snapshot) {
                       return (snapshot.hasData&&snapshot.data!.isNotEmpty)?Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -344,16 +345,9 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
                             ),
                           ),
 
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 40,top: 20),
-                              height: MediaQuery.of(context).size.height,
-                              decoration: BoxDecoration(
-                                border:Border(
-                                  top: BorderSide(width: 2.0, color: themeColor,),
-                                  left: BorderSide(width: 2.0, color: themeColor),
-                                )
-                              ),
+                          Container(
+                            width: MediaQuery.of(context).size.width- MediaQuery.of(context).size.width/2,
+                            child: Card(
                               child: StreamBuilder<Post>(
                                   stream: selectedPost.stream,
                                   builder: (context, snapshot) {
@@ -398,145 +392,142 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
                                         },
                                         onRatingUpdate: (double value) {},
                                       );
-                                      return Flexible(
-                                        flex: 1,
-                                        child: Container(
+                                      return Container(
 
-                                          padding: EdgeInsets.all(10),
-                                          child: Column(
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
 
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                snapshot.data!.title,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold),
-                                              ),
-                                              Container(
-                                                  margin: EdgeInsets.only(top: 15),
-                                                  padding: EdgeInsets.only(top: 10),
-                                                  child: Text(
-                                                    snapshot.data!.description,
-                                                    style: TextStyle(height: 1.5),
-                                                  )),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 10),
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              snapshot.data!.title,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Container(
+                                                margin: EdgeInsets.only(top: 15),
                                                 padding: EdgeInsets.only(top: 10),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        "Price  : ${snapshot.data!.price} SGD"),
-                                                  ],
-                                                ),
+                                                child: Text(
+                                                  snapshot.data!.description,
+                                                  style: TextStyle(height: 1.5),
+                                                )),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      "Price  : ${snapshot.data!.price} SGD"),
+                                                ],
                                               ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 10),
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        "Status  : ${snapshot.data!.status} "),
-                                                  ],
-                                                ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      "Status  : ${snapshot.data!.status} "),
+                                                ],
                                               ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 10),
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        "Category  : ${snapshot.data!.category} "),
-                                                  ],
-                                                ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 10),
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                      "Category  : ${snapshot.data!.category} "),
+                                                ],
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.only(top: 10),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text("Rating  : "),
-                                                        Container(
-                                                            margin:
-                                                            EdgeInsets.only(left: 5),
-                                                            child: rating)
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.only(top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text("Rating  : "),
+                                                      Container(
+                                                          margin:
+                                                          EdgeInsets.only(left: 5),
+                                                          child: rating)
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                              Container(
-                                                margin: EdgeInsets.only(top: 50),
-                                                child: Row(
-                                                  children: [
-                                                    RaisedButton(onPressed: (){
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(top: 50),
+                                              child: Row(
+                                                children: [
+                                                  RaisedButton(onPressed: (){
 
-                                                      Navigator.push(context,
-                                                          MaterialPageRoute(builder: (context) => PostForm(post: snapshot.data,onSuccess: (){
-                                                            getAllPost();
-                                                          },)));
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(builder: (context) => PostForm(post: snapshot.data,onSuccess: (){
+                                                          getAllPost();
+                                                        },)));
 
-                                                    }, color: themeColor,
-                                                      child: Text("Edit",style: TextStyle(color: Colors.white),),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
+                                                  }, color: themeColor,
+                                                    child: Text("Edit",style: TextStyle(color: Colors.white),),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
 
-                                                    SizedBox(
-                                                      width: 20,
-                                                    ),
-                                                    RaisedButton(onPressed: (){
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (dcontext) {
-                                                            return AlertDialog(
-                                                              title: Text(
-                                                                  'Do you want to delete this post " ${snapshot.data!.title } " ?'),
-                                                              content: Text(
-                                                                  'This will be done permanently and cannot be undo.'),
-                                                              actions: [
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    Navigator.pop(dcontext);
-                                                                  },
-                                                                  child: Text(
-                                                                    'CANCEL',
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  RaisedButton(onPressed: (){
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (dcontext) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                'Do you want to delete this post " ${snapshot.data!.title } " ?'),
+                                                            content: Text(
+                                                                'This will be done permanently and cannot be undo.'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(dcontext);
+                                                                },
+                                                                child: Text(
+                                                                  'CANCEL',
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          0xFF6200EE)),
+                                                                ),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(dcontext);
+                                                                  deletePost(snapshot.data!.id);
+                                                                },
+                                                                child: Text('Confirm',
                                                                     style: TextStyle(
                                                                         color: Color(
-                                                                            0xFF6200EE)),
-                                                                  ),
-                                                                ),
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    Navigator.pop(dcontext);
-                                                                    deletePost(snapshot.data!.id);
-                                                                  },
-                                                                  child: Text('Confirm',
-                                                                      style: TextStyle(
-                                                                          color: Color(
-                                                                              0xFF6200EE))),
-                                                                ),
-                                                              ],
-                                                            );
-                                                          });
-                                                    }, color: themeColor,
-                                                      child: Text("Delete",style: TextStyle(color: Colors.white),),
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),)
-                                                  ],
-                                                ),
+                                                                            0xFF6200EE))),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        });
+                                                  }, color: themeColor,
+                                                    child: Text("Delete",style: TextStyle(color: Colors.white),),
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),)
+                                                ],
                                               ),
+                                            ),
 
 
-                                            ],
-                                          ),
+                                          ],
                                         ),
                                       );
                                     } else {
@@ -547,37 +538,38 @@ class _GetManagePostsState extends State<ManagePostsScreen> {
                           )
                         ],
                       )
-                          :Container(
-                            height: MediaQuery.of(context).size.height,
+                          :Flexible(
+                            child: Container(
                         alignment: Alignment.center,
-                        child: OutlinedButton(
-                          onPressed: (){
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => PostForm(onSuccess: (){
-                                  getAllPost();
-                                },)));
+                        child: Center(
+                            child: OutlinedButton(
+                              onPressed: (){
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => PostForm(onSuccess: (){
+                                      getAllPost();
+                                    },)));
 
-                          },
+                              },
 
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.only(top: 10,bottom: 10),
-                            child: const Text("Create your first post here",style: TextStyle(
-                              fontSize: 20
-                            ),),
-                          ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))),
+                              ),
+                              child: Container(
+                                padding: EdgeInsets.only(top: 10,bottom: 10),
+                                child: const Text("Create your first post here",style: TextStyle(
+                                    fontSize: 20
+                                ),),
+                              ),
+                            ),
                         ),
-                      );
+                      ),
+                          );
 
                     }
-                  ),
-                )
-              ],
-            ),
-
-          ],
+                ),
+              )
+            ],
+          ),
         ));
   }
 }
