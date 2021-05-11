@@ -62,7 +62,9 @@ class _GetLoginState extends State<Login> {
                         elevation: 20,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        child: Container()),
+                        child: Container(
+                          child: Image.asset("assets/images/img1.jpeg"),
+                        )),
                   ),
             SizedBox(
               width: 15,

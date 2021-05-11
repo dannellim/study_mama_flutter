@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:study_mama_flutter/main.dart';
 import 'package:study_mama_flutter/util/color.dart';
 import 'package:study_mama_flutter/util/constant.dart';
+import 'package:study_mama_flutter/util/widget.dart';
 
 import '../model.dart';
 
@@ -29,6 +31,7 @@ class PostFormState extends State<PostForm>{
   TextEditingController priceTextController = TextEditingController();
   TextEditingController contactTextController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
+  BehaviorSubject<bool> status = BehaviorSubject.seeded(true);
 
   var dio=getDio();
 
@@ -57,6 +60,11 @@ class PostFormState extends State<PostForm>{
 
       if(widget.post!.location!=null){
         locTextController.text=widget.post!.location!.lat.toString()+","+widget.post!.location!.lon.toString();
+      }
+      if(widget.post!.status.contains("CLOSED")){
+        status.add(false);
+      }else{
+        status.add(true);
       }
       priceTextController.text=widget.post!.price;
       contactTextController.text=widget.post!.contact;
@@ -193,7 +201,29 @@ class PostFormState extends State<PostForm>{
                  ),
                ),
                SizedBox(height: 10,),
-
+               StreamBuilder<bool>(
+                   stream: status.stream,
+                   initialData: false,
+                   builder: (context, snapShot) {
+                     return Row(
+                       mainAxisAlignment:
+                       MainAxisAlignment.center,
+                       children: [
+                         getRadioButton("OPEN", snapShot.data!,
+                             onTapFun: () {
+                               status.add(true);
+                             }),
+                         SizedBox(
+                           width: 7,
+                         ),
+                         getRadioButton("CLOSED", !snapShot.data!,
+                             onTapFun: () {
+                               status.add(false);
+                             }),
+                       ],
+                     );
+                   }),
+               SizedBox(height: 10,),
                TextFormField(
                  controller: webTextController,
                  decoration: InputDecoration(
@@ -284,7 +314,7 @@ class PostFormState extends State<PostForm>{
                          "location":locCation,
                          "category":category,
                          "accountId":accountID,
-                         "status":"0",
+                         "status":status.value?"1":"0",
                          "contact":contact,
                          "price":price,
                        };

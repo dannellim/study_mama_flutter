@@ -107,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print("size"+postPage.posts.length.toString());
       print("post"+postPage.posts[0].toJson().toString());
     }).catchError((onError){
+      posts.add([]);
       print("Error error $onError");
     });
   }
@@ -414,7 +415,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: StreamBuilder<List<Post>>(
                               stream: posts.stream,
                               builder: (context, snapshot) {
-                                return snapshot.hasData?ListView.builder(
+                                return snapshot.hasData?snapshot.data!.length>0?ListView.builder(
                                   itemCount: snapshot.hasData?snapshot.data?.length:0,
                                   itemBuilder: (BuildContext context, int index) {
                                     return PostList(snapshot.data![index],(post){
@@ -422,6 +423,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     });
                                   },
 
+                                ):Container(
+                                  child: Center(
+                                      child: Text("No data available",style: TextStyle(fontSize: 20),)),
                                 ):spinkit;
                               }
                             ),
