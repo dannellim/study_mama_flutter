@@ -246,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //
 
     getAllPost();
+    fetchRecommendation();
   }
 
   void getAllPost() {
@@ -265,6 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }).catchError((onError) {
       print("Error error $onError");
     });
+
   }
 
   void searchPost() {
@@ -558,8 +560,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       children: snapshot.data!
                                           .map((e) => PostList(
                                           e,
-                                              (post) => selectedPost
-                                              .add(post)))
+                                              (post){
+                                                selectedPost
+                                                    .add(post);
+                                                fetchRecommendation();
+                                              }))
                                           .toList(),
                                     ),
                                   )
