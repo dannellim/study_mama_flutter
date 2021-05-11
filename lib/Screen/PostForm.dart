@@ -76,117 +76,29 @@ class PostFormState extends State<PostForm>{
   Widget build(BuildContext context) {
     // TODO: implement build
    return AlertDialog(
-
      contentPadding: EdgeInsets.all(0),
      shape: RoundedRectangleBorder(
          borderRadius: BorderRadius.all(Radius.circular(20))),
-     title: Container(
-         padding: EdgeInsets.only(left: 5),
-         child: Text("Create New Post")),
+     title: Text("Create New Post"),
      content: SingleChildScrollView(
        child: Container(
-         constraints: BoxConstraints(minWidth: 350),
-         padding: EdgeInsets.only(left: 30,right: 30,top: 50),
+         constraints: BoxConstraints(maxWidth: 350),
          width: MediaQuery.of(context).size.width * 0.9,
+         padding: EdgeInsets.only(top: 20),
          child: Form(
            key: _postFormKey,
            child: Column(
              mainAxisSize: MainAxisSize.max,
              children: [
-               TextFormField(
-                 controller: titleTextController,
-                 validator: (val) {
-                   print("title txt"+titleTextController.value.text);
-                   return val!.isEmpty ? "Enter Title here" : null;
-                 },
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
-                     ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                   ),
-                   contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
-                   filled: true,
-                   fillColor: themeDarkColor.withAlpha(20),
-                   labelText: 'Title',
-                   hintText: "Enter Title here",
-                 ),
-               ),
-               SizedBox(height: 10,),
-
-               TextFormField(
-                 controller: descTextController,
-                 maxLines: 5,
-                 validator: (val) {
-                   return val!.isEmpty ? "Enter description here" : null;
-                 },
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
-                     ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                   ),
-                   contentPadding: EdgeInsets.fromLTRB(20,60,15,0),
-                   filled: true,
-                   labelText: 'Description',
-                   fillColor: themeDarkColor.withAlpha(20),
-                   hintText: "Enter description here",
-                 ),
-               ),
-               SizedBox(height: 10,),
-
-               TextFormField(
-                 controller: priceTextController,
-
-                 validator: (val) {
-                   return val!.isEmpty ? "Enter price here" : null;
-                 },
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
-                     ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                   ),
-                   contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
-                   filled: true,
-                   labelText: 'Price',
-                   fillColor: themeDarkColor.withAlpha(20),
-                   hintText: "Enter price here",
-                 ),
-               ),
-               SizedBox(height: 10,),
-
-               TextFormField(
-                 controller: categoryController,
-                 validator: (val) {
-                   return val!.isEmpty ? "Enter Category here" : null;
-                 },
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
-                     ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                   ),
-                   contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
-                   filled: true,
-                   labelText: 'Category',
-                   fillColor: themeDarkColor.withAlpha(20),
-                   hintText: "Enter Category here",
-                 ),
-               ),
-               SizedBox(height: 10,),
-
-               TextFormField(
-                 controller: contactTextController,
-
-                 validator: (val) {
-                   return val!.isEmpty ? "Enter Contact Number here" : null;
-                 },
-                 decoration: InputDecoration(
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: titleTextController,
+                   validator: (val) {
+                     print("title txt"+titleTextController.value.text);
+                     return val!.isEmpty ? "Enter Title here" : null;
+                   },
+                   decoration: InputDecoration(
                      border: OutlineInputBorder(
                        borderRadius: BorderRadius.all(
                          Radius.circular(8),
@@ -195,12 +107,113 @@ class PostFormState extends State<PostForm>{
                      ),
                      contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
                      filled: true,
-                   labelText: 'Contact Number',
-                   fillColor: themeDarkColor.withAlpha(20),
-                     hintText: "Enter Contact Number here",
+                     fillColor: themeDarkColor.withAlpha(20),
+                     labelText: 'Title',
+                     hintText: "Enter Title here",
+                   ),
                  ),
                ),
                SizedBox(height: 10,),
+
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: descTextController,
+                   maxLines: 5,
+                   validator: (val) {
+                     return val!.isEmpty ? "Enter description here" : null;
+                   },
+                   decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(
+                         Radius.circular(8),
+                       ),
+                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                     ),
+                     contentPadding: EdgeInsets.fromLTRB(20,60,15,0),
+                     filled: true,
+                     labelText: 'Description',
+                     fillColor: themeDarkColor.withAlpha(20),
+                     hintText: "Enter description here",
+                   ),
+                 ),
+               ),
+               SizedBox(height: 10,),
+
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: priceTextController,
+
+                   validator: (val) {
+                     return val!.isEmpty ? "Enter price here" : null;
+                   },
+                   decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(
+                         Radius.circular(8),
+                       ),
+                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                     ),
+                     contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
+                     filled: true,
+                     labelText: 'Price',
+                     fillColor: themeDarkColor.withAlpha(20),
+                     hintText: "Enter price here",
+                   ),
+                 ),
+               ),
+               SizedBox(height: 10,),
+
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: categoryController,
+                   validator: (val) {
+                     return val!.isEmpty ? "Enter Category here" : null;
+                   },
+                   decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(
+                         Radius.circular(8),
+                       ),
+                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                     ),
+                     contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
+                     filled: true,
+                     labelText: 'Category',
+                     fillColor: themeDarkColor.withAlpha(20),
+                     hintText: "Enter Category here",
+                   ),
+                 ),
+               ),
+               SizedBox(height: 10,),
+
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: contactTextController,
+
+                   validator: (val) {
+                     return val!.isEmpty ? "Enter Contact Number here" : null;
+                   },
+                   decoration: InputDecoration(
+                       border: OutlineInputBorder(
+                         borderRadius: BorderRadius.all(
+                           Radius.circular(8),
+                         ),
+                         borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                       ),
+                       contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
+                       filled: true,
+                     labelText: 'Contact Number',
+                     fillColor: themeDarkColor.withAlpha(20),
+                       hintText: "Enter Contact Number here",
+                   ),
+                 ),
+               ),
+               SizedBox(height: 10,),
+
                StreamBuilder<bool>(
                    stream: status.stream,
                    initialData: false,
@@ -224,50 +237,54 @@ class PostFormState extends State<PostForm>{
                      );
                    }),
                SizedBox(height: 10,),
-               TextFormField(
-                 controller: webTextController,
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: webTextController,
+                   decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(
+                         Radius.circular(8),
+                       ),
+                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
                      ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
+                     contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
+                     filled: true,
+                     labelText: 'Website',
+                     fillColor: themeDarkColor.withAlpha(20),
+                     hintText: "Enter website here",
                    ),
-                   contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
-                   filled: true,
-                   labelText: 'Website',
-                   fillColor: themeDarkColor.withAlpha(20),
-                   hintText: "Enter website here",
                  ),
                ),
                SizedBox(height: 10,),
-               TextFormField(
-                 controller: locTextController,
-                 decoration: InputDecoration(
-                   border: OutlineInputBorder(
-                     borderRadius: BorderRadius.all(
-                       Radius.circular(8),
+               Padding(
+                 padding: EdgeInsets.only(left:30,right: 30),
+                 child: TextFormField(
+                   controller: locTextController,
+                   decoration: InputDecoration(
+                     border: OutlineInputBorder(
+                       borderRadius: BorderRadius.all(
+                         Radius.circular(8),
+                       ),
+                       borderSide: BorderSide(style: BorderStyle.none, width: 0),
                      ),
-                     borderSide: BorderSide(style: BorderStyle.none, width: 0),
-                   ),
-                   contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
-                   filled: true,
+                     contentPadding: EdgeInsets.fromLTRB(20,10,15,0),
+                     filled: true,
 
-                   labelText: 'Location',
-                   hintText: "1.3369103,103.697898",
-                   fillColor: themeDarkColor.withAlpha(20),
+                     labelText: 'Location',
+                     hintText: "1.3369103,103.697898",
+                     fillColor: themeDarkColor.withAlpha(20),
+                   ),
                  ),
                ),
                SizedBox(height: 20,),
-
+               Divider(
+                 height: 1,
+               ),
                Container(
                  width: double.infinity,
                  child: FlatButton(
                    padding: EdgeInsets.all(25),
-                   shape: RoundedRectangleBorder(
-                       borderRadius: BorderRadius.only(
-                           bottomLeft: Radius.circular(20),
-                           bottomRight: Radius.circular(20))),
                    child: Text(
                      "Cancel",
                      style: TextStyle(
@@ -279,7 +296,9 @@ class PostFormState extends State<PostForm>{
                    },
                  ),
                ),
-               SizedBox(height: 10,),
+               Divider(
+                 height: 1,
+               ),
                Container(
                  width: double.infinity,
                  child: FlatButton(

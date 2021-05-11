@@ -396,7 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Text(
                                 "STUDY",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w800, fontSize: 25),
+                                    fontWeight: FontWeight.w800, fontSize: 35),
                               ),
                               SizedBox(
                                 width: 5,
@@ -404,7 +404,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Text(
                                 "MAMA",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 25),
+                                    fontWeight: FontWeight.w300, fontSize: 35),
                               ),
                               Spacer(),
                               snapshot.hasData
@@ -452,40 +452,106 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               ),
+                              // snapshot.hasData
+                              //     ? RaisedButton(
+                              //   onPressed: () {
+                              //     showDialog(
+                              //         context: context,
+                              //         builder: (context) {
+                              //           return Profile();
+                              //         });
+                              //   },
+                              //   shape: RoundedRectangleBorder(
+                              //       borderRadius:
+                              //       BorderRadius.circular(5)),
+                              //   color: themeDarkColor,
+                              //   child: Padding(
+                              //     padding:
+                              //     EdgeInsets.fromLTRB(3, 8, 8, 8),
+                              //     child: Row(
+                              //       children: [
+                              //         Icon(
+                              //           Icons.person,
+                              //           color: Colors.white,
+                              //           size: 20,
+                              //         ),
+                              //         SizedBox(
+                              //           width: 5,
+                              //         ),
+                              //         Text(
+                              //           snapshot.data!.username,
+                              //           style: TextStyle(
+                              //               color: Colors.white),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // )
+                              //     : Container(),
                               snapshot.hasData
-                                  ? RaisedButton(
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Profile();
-                                      });
+                                  ? PopupMenuButton(
+                                initialValue: 0,
+                                onSelected: (int index) {
+                                  if(index==0){
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) => Profile()));
+                                  }else{
+                                    loginData.add(null);
+                                    loginRequest=LoginRequest();
+                                    token="";
+                                    accountID="";
+                                    loginAccName="";
+                                  }
                                 },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(5)),
-                                color: themeDarkColor,
-                                child: Padding(
-                                  padding:
-                                  EdgeInsets.fromLTRB(3, 8, 8, 8),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 20,
+                                child: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: themeColor), borderRadius: BorderRadius.circular(20)
                                       ),
-                                      SizedBox(
-                                        width: 5,
+                                      child: Padding(
+                                        padding:
+                                        EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.person,
+                                              color: themeColor,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              snapshot.data!.username,
+                                              style: TextStyle(
+                                                  color: themeColor),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Text(
-                                        snapshot.data!.username,
-                                        style: TextStyle(
-                                            color: Colors.white),
+                                    )),
+                                itemBuilder: (context) {
+                                  return List.generate(2, (index) {
+                                    return index==1?PopupMenuItem(
+                                      value: index,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.logout),
+                                          Text('Sign Out'),
+                                        ],
+                                      )):PopupMenuItem(
+                                      value: index,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.person),
+                                          Text('Profile'),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                    );
+                                  });
+                                },
                               )
                                   : Container(),
                             ],
@@ -1557,8 +1623,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
 Dio getDio() {
   var options = BaseOptions(
     // baseUrl: 'http://localhost:8080/',
-      baseUrl:
-      'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080',
+      baseUrl: 'http://studymama-load-balancer-795957589.ap-southeast-1.elb.amazonaws.com:8080',
       connectTimeout: 5000,
       receiveTimeout: 3000,
       headers: {

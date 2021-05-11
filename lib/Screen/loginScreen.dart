@@ -358,6 +358,8 @@ class _GetLoginState extends State<Login> {
                 GetProfileResponse response = GetProfileResponse.fromJson(value.data);
                 accountID = response.id.toString();
                 loginAccName = username;
+                print("accoount "+accountID);
+                print("name "+loginAccName);
 
               } else {
                 Toast.show("Get Profile Fail", context,
