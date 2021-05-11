@@ -298,7 +298,7 @@ class _GetLoginState extends State<Login> {
         Map<String, dynamic> map = {
           "username": username,
           "password": password,
-          "role": isUser_BS.value? "user" : "admin" ,
+          "role": isUser_BS.value? "ROLE_USER" : "ROLE ADMIN" ,
         };
 
         loginRemoteRepository.register(map).then((value) {
