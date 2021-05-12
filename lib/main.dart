@@ -328,15 +328,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> searchPostNearMe() async {
     posts.add(null);
-    if (locationData == null) {
-      locationData = await _determinePosition();
-    }
+    // if (locationData == null) {
+    //   locationData = await _determinePosition();
+    // }
+    //
+    // print("Location ${locationData?.latitude} ${locationData?.longitude}");
 
-    print("Location ${locationData?.latitude} ${locationData?.longitude}");
     dio.get("/postService/postNearMe", queryParameters: {
       "currentPage": 0,
-      "lat": locationData?.latitude,
-      "lon": locationData?.longitude,
+      "lat": "1.332962749347505",
+      "lon": "103.87320790544078",
       "distance": geoController.value.text,
       "unit": "km",
       "pageSize": 100
@@ -1019,7 +1020,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     widget.dio.post("/rateSubmit", data: {
       "postId": widget.post.id,
       "accountId": accountID,
-      "accountName":loginAccName,
+      "accountName":"",
       "rateScore": rate,
     }).then((value) {
       print("Rate" + rate.toString());
